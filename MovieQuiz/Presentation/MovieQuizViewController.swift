@@ -41,9 +41,9 @@ final class MovieQuizViewController: UIViewController {
     }
     
     struct QuizResultsViewModel {
-      let title: String
-      let text: String
-      let buttonText: String
+        let title: String
+        let text: String
+        let buttonText: String
     }
     
     private let questions: [QuizQuestion] = [
@@ -134,11 +134,11 @@ final class MovieQuizViewController: UIViewController {
     private func showNextQuestionOrResults() {
         if currentQuestionIndex == questions.count - 1 {
             let text = "Ваш результат: \(correctAnswers)/10"
-                    let viewModel = QuizResultsViewModel(
-                        title: "Этот раунд окончен!",
-                        text: text,
-                        buttonText: "Сыграть ещё раз")
-                    show(quiz: viewModel)
+            let viewModel = QuizResultsViewModel(
+                title: "Этот раунд окончен!",
+                text: text,
+                buttonText: "Сыграть ещё раз")
+            show(quiz: viewModel)
         } else {
             currentQuestionIndex += 1
             
