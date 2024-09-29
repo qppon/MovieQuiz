@@ -11,9 +11,8 @@ import UIKit
 class AlertPresenter: AlertPresentorProtocol {
     weak var delegate: AlertPresntorDelegate?
     
-    func presentAlert() {
-        guard let result = delegate?.createAlertModel(),
-              let viewController = delegate as? UIViewController else {return}
+    func presentAlert(_ result: AlertModel) {
+        guard let viewController = delegate as? UIViewController else {return}
         
         let alert = UIAlertController(
             title: result.title,

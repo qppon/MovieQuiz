@@ -8,5 +8,5 @@
 import Foundation
 
 protocol AlertPresentorProtocol {
-    func presentAlert() -> Void
+    func presentAlert(_ result: AlertModel) -> Void
 }
