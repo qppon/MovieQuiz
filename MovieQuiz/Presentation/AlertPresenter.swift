@@ -8,16 +8,22 @@
 import Foundation
 import UIKit
 
-class AlertPresenter: AlertPresentorProtocol {
-    weak var delegate: AlertPresntorDelegate?
+class AlertPresenter: AlertPresenterProtocol {
+    private var viewController: MovieQuizViewControllerProtocol?
     
-    func presentAlert(_ result: AlertModel) {
-        guard let viewController = delegate as? UIViewController else {return}
+    init(viewController: MovieQuizViewControllerProtocol) {
+        self.viewController = viewController
+    }
+    
+    func presentAlert(_ result: AlertModel) { 
+        guard let viewController = self.viewController else {return}
         
         let alert = UIAlertController(
             title: result.title,
             message: result.message,
             preferredStyle: .alert)
+        
+        alert.view.accessibilityIdentifier = "Game results"
         
         let action = UIAlertAction(title: result.buttonText, style: .default) { _ in
             result.complection()
@@ -26,7 +32,8 @@ class AlertPresenter: AlertPresentorProtocol {
         
         alert.addAction(action)
         
-        viewController.present(alert, animated: true)
+        viewController.presentAlert(alert: alert)
+
     }
 }
 
