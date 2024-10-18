@@ -8,16 +8,16 @@ import UIKit
 
 final class MovieQuizPresenter: QuestionFactoryDelegate, AlertPresnterDelegate {
     
-    var questionsAmount = 10
+    private var questionsAmount = 10
     private var currentQuestionIndex = 0
-    var correctAnswers = 0
+    private var correctAnswers = 0
     
     private weak var viewController: MovieQuizViewControllerProtocol?
-    var questionFactory: QuestionFactoryProtocol?
+    private var questionFactory: QuestionFactoryProtocol?
     var alertPresenter: AlertPresenterProtocol?
-    var statisticService: StatisticServiceProtocol!
+    private var statisticService: StatisticServiceProtocol!
     
-    var currentQuestion: QuizQuestion?
+    private var currentQuestion: QuizQuestion?
     
     
     init(viewController: MovieQuizViewControllerProtocol) {
@@ -42,23 +42,6 @@ final class MovieQuizPresenter: QuestionFactoryDelegate, AlertPresnterDelegate {
     }
     
     
-    private func didAnswer(isYes: Bool) {
-        guard let currentQuestion = currentQuestion else {
-            return
-        }
-        
-        viewController?.buttonsIsEnabled(false)
-        
-        let givenAnswer = isYes
-        
-        self.showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
-        
-        if givenAnswer == currentQuestion.correctAnswer {
-            correctAnswers += 1
-        }
-    }
-    
-    
     func showNextQuestionOrResults() {
         if self.isLastQuestion() {
             alertPresenter?.presentAlert(createAlertModel())
@@ -66,20 +49,6 @@ final class MovieQuizPresenter: QuestionFactoryDelegate, AlertPresnterDelegate {
             self.switchToNextQuestion()
             self.questionFactory?.requestNextQuestion()
         }
-    }
-    
-    
-    private func makeMessage() -> String {
-        var message: String = ""
-        if let statisticService {
-            statisticService.store(correct: self.correctAnswers, total: 10)
-            let gamesCount = "Количество сыгранных игр: \(statisticService.gamesCount)\n"
-            let record = "Рекорд: \(statisticService.bestGame.correct)/\(statisticService.bestGame.total) (\(statisticService.bestGame.date.dateTimeString))\n"
-            let acuracy = "Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))%"
-            
-            message += gamesCount + record + acuracy
-        }
-        return message
     }
     
     
@@ -166,4 +135,36 @@ final class MovieQuizPresenter: QuestionFactoryDelegate, AlertPresnterDelegate {
             self.showNextQuestionOrResults()
         }
     }
+    
+    
+    private func didAnswer(isYes: Bool) {
+        guard let currentQuestion = currentQuestion else {
+            return
+        }
+        
+        viewController?.buttonsIsEnabled(false)
+        
+        let givenAnswer = isYes
+        
+        self.showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+        
+        if givenAnswer == currentQuestion.correctAnswer {
+            correctAnswers += 1
+        }
+    }
+    
+    
+    private func makeMessage() -> String {
+        var message: String = ""
+        if let statisticService {
+            statisticService.store(correct: self.correctAnswers, total: 10)
+            let gamesCount = "Количество сыгранных игр: \(statisticService.gamesCount)\n"
+            let record = "Рекорд: \(statisticService.bestGame.correct)/\(statisticService.bestGame.total) (\(statisticService.bestGame.date.dateTimeString))\n"
+            let acuracy = "Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))%"
+            
+            message += gamesCount + record + acuracy
+        }
+        return message
+    }
+    
 }

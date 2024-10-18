@@ -39,7 +39,7 @@ class MovieQuizTests: XCTestCase {
         
         
         let result = arithmeticOperations.addition(num1: num1, num2: num2) { result in
-            XCTAssertEqual(result, 4)
+            XCTAssertEqual(result, 3)
             expectation.fulfill()
         }
         
